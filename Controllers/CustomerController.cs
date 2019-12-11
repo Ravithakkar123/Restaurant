@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,23 +23,50 @@ namespace WebApi.Controllers
 
         // GET: api/Customer
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
+     
+        public IActionResult GetCustomer([FromQuery]Parameter parameter, string query)
         {
-            return await _context.Customer.ToListAsync();
+            try
+            {
+                
+                var customers = from c in _context.Customer
+                               select c;
+                var customer = _context.Customer.Include(s => s.CustomerName).ToList();
+                return Ok(customer);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+        public IActionResult GetCustomer()
+        {
+            try
+            {
+                List<Customer> customer = _context.Customer.ToList();
+            
+                return Ok(customer);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/Customer/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public ActionResult<Customer> GetCustomer(int id)
         {
-            var customer = await _context.Customer.FindAsync(id);
-
-            if (customer == null)
+            try
             {
-                return NotFound();
+                var customername = _context.Customer.Include(s => s.CustomerName).FirstOrDefault(i => i.CustomerId == id); ;
+                return Ok(customername);
             }
-
-            return customer;
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/Customer/5

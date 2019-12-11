@@ -22,23 +22,33 @@ namespace WebApi.Controllers
 
         // GET: api/FoodItem
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FoodItem>>> GetFoodItem()
-        {
-            return await _context.FoodItem.ToListAsync();
-        }
 
+        public IActionResult GetFoodItem()
+        {
+            try
+            {
+                var fooditem = _context.FoodItem.ToList();
+                return Ok(fooditem);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         // GET: api/FoodItem/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<FoodItem>> GetFoodItem(int id)
+
+        public IActionResult GetFoodItem(int id)
         {
-            var foodItem = await _context.FoodItem.FindAsync(id);
-
-            if (foodItem == null)
+            try
             {
-                return NotFound();
+                var subject = _context.FoodItem.Find(id);
+                return Ok(subject);
             }
-
-            return foodItem;
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/FoodItem/5
@@ -79,11 +89,18 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<FoodItem>> PostFoodItem(FoodItem foodItem)
         {
-            _context.FoodItem.Add(foodItem);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetFoodItem", new { id = foodItem.FoodItemId }, foodItem);
+            try
+            {
+                _context.FoodItem.Add(foodItem);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetFoodItem", new { id = foodItem.FoodItemId }, foodItem);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
+
 
         // DELETE: api/FoodItem/5
         [HttpDelete("{id}")]

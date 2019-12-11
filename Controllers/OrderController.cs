@@ -22,41 +22,49 @@ namespace WebApi.Controllers
 
         // GET: api/Order
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
+        public IActionResult GetOrders()
         {
-            return await _context.Order.ToListAsync();
+            try
+            {
+                var order = _context.Order.ToList();
+                return Ok(order);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/Order/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public IActionResult GetOrder(int id)
         {
-            var order = await _context.Order.FindAsync(id);
-
-            if (order == null)
+            try
             {
-                return NotFound();
+                var order = _context.Order.Find(id);
+                return Ok(order);
             }
-
-            return order;
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/Order/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(int id, Order order)
+        public IActionResult UpdateSubject(int id, Order order)
         {
             if (id != order.OrderId)
             {
                 return BadRequest();
             }
-
             _context.Entry(order).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
+                return Ok(order);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -69,9 +77,8 @@ namespace WebApi.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
+
 
         // POST: api/Order
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -87,23 +94,30 @@ namespace WebApi.Controllers
 
         // DELETE: api/Order/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Order>> DeleteOrder(int id)
+        public IActionResult DeleteOrder(int id)
         {
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
+            var result = _context.Order.Find(id);
+            if (result == null)
             {
                 return NotFound();
             }
 
-            _context.Order.Remove(order);
-            await _context.SaveChangesAsync();
+            _context.Order.Remove(result);
 
-            return order;
+            try
+            {
+                _context.SaveChanges();
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
-
         private bool OrderExists(int id)
         {
             return _context.Order.Any(e => e.OrderId == id);
         }
+
     }
 }
