@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Models;
 
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RestaurantDataContext))]
-    partial class RestaurantDataContextModelSnapshot : ModelSnapshot
+    [Migration("20191212043852_Updated")]
+    partial class Updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,13 +83,11 @@ namespace WebApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("FoodItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("OrderNo")
@@ -108,8 +108,6 @@ namespace WebApi.Migrations
 
                     b.HasIndex("FoodItemId");
 
-                    b.HasIndex("OrderItemId");
-
                     b.ToTable("Order");
                 });
 
@@ -124,12 +122,6 @@ namespace WebApi.Migrations
                     b.HasOne("WebApi.Models.FoodItem", "FoodItem")
                         .WithMany()
                         .HasForeignKey("FoodItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApi.Models.FoodItem", "OrderItem")
-                        .WithMany()
-                        .HasForeignKey("OrderItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

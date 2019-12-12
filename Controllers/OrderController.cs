@@ -50,6 +50,12 @@ namespace WebApi.Controllers
             }
         }
 
+   /*     public IActionResult GetOrderData()
+        {
+            
+
+        }*/
+
         // PUT: api/Order/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -81,8 +87,6 @@ namespace WebApi.Controllers
 
 
         // POST: api/Order
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
@@ -91,7 +95,29 @@ namespace WebApi.Controllers
 
             return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
         }
+        // POST: Add item to existing order
+        public IActionResult EditOrder(int id, Order order)
+        {
+            if (id != order.OrderId)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
 
+                    _context.Order.Update(order);
+                    _context.SaveChanges();
+                //    return CreatedAtAction("GetCourses", new { id = order.OrderId}, order);
+                    return Ok(order);
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+        }
         // DELETE: api/Order/5
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id)

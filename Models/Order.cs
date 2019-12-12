@@ -14,19 +14,14 @@ namespace WebApi.Models
         [Required]
         [Column(TypeName = "nvarchar(5)")]
         public int OrderNo { get; set; }
-      //  [Required]
-        //[Column(TypeName ="nvarchar(5)")]
-      //  public int CustomerId { get; set; }
-        [Required]
-        [Column(TypeName ="nvarchar(5)")]
-        public int Quantity { get; set; }
+      
         [Required]
         [Column(TypeName ="nvarchar(5)")]
         public int TotalAmount { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(20)")]
         public string PaymentMethod { get; set; }
-        [Required]
+       /* [Required]
         [Column(TypeName ="nvarchar(6)")]
         public int PaymentId { get; set; }
         [Required]
@@ -43,14 +38,18 @@ namespace WebApi.Models
         [Required]
         [Column(TypeName = "nvarchar(3)")]
 
-        public string CVV { get; set; }
+        public string CVV { get; set; }*/
 
 
-        public int CustomerId { get; set; }
+       public int CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
         public int FoodItemId { get; set; }
         [ForeignKey("FoodItemId") ]
         public FoodItem FoodItem { get; set; }
+        public int OrderItemId { get; set; }
+        [ForeignKey("OrderItemId")]
+        public FoodItem OrderItem { get; set; }
+
     }
 }
