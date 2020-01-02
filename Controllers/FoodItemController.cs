@@ -42,7 +42,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var subject = _context.FoodItem.Find(id);
+                var foodItem = _context.FoodItem.Find(id);
                 return Ok(subject);
             }
             catch

@@ -60,7 +60,7 @@ namespace WebApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public IActionResult UpdateSubject(int id, Order order)
+    /*    public IActionResult UpdateOrder(int id, Order order)
         {
             if (id != order.OrderId)
             {
@@ -84,7 +84,7 @@ namespace WebApi.Controllers
                 }
             }
         }
-
+        */
 
         // POST: api/Order
         [HttpPost]
@@ -109,7 +109,7 @@ namespace WebApi.Controllers
 
                     _context.Order.Update(order);
                     _context.SaveChanges();
-                //    return CreatedAtAction("GetCourses", new { id = order.OrderId}, order);
+                    return CreatedAtAction("GetOrder", new { id = order.OrderId}, order);
                     return Ok(order);
                 }
                 catch
